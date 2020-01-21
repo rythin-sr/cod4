@@ -1,0 +1,53 @@
+state("FEAR")
+{
+	string16 mission : 0x16C045;
+	byte checkpointFreeze: 0x170D28;
+    int bLoading: 0x173DB0;
+}
+
+startup
+{
+vars.missions = new Dictionary<string,string> { 
+		{"Docks.World00p", "First Encounter"}, 
+		{"WTF_Entry.World00p", "Infiltration"},
+		{"WTF_Ambush.World00p", "Heavy Resistance"},
+		{"Moody.World00p", "Bad Water"},
+		{"WTF_Exfil.World00p", "Exeunt Omnes"},
+		{"ATC_Roof.World00p", "LZ is Hot"},
+		{"Admin.World00p", "Watchers"},
+		{"Bishop_Rescue.World00p", "Bishop"},
+		{"Bioshop_Evac.World00p", "Blindside"},
+		{"Mapes_Elevator.World00p", "Sayonara, Sucker!"},
+		{"Badge.World00p", "Unauthorized Personel"},
+		{"Hives.World00p", "Afterimage"},
+		{"Alice.World00p", "Alice Wade"}, 
+		{"Getting_Out.World00p", "Flight"},
+		{"Wades.World00p", "Urban Decay"},
+		{"Factory.World00p", "Point of Entry"},
+		{"Facility_Upper.World00p", "Lapdog"},
+		{"Facility_Bypass.World00p", "Bypass"},
+		{"Vault.World00p", "The Vault"},
+        {"Alma.World00p", "Ground Zero"},
+		}; 
+
+         vars.missionList = new List<string>();
+		   foreach (var Tag in vars.missions) {
+        settings.Add(Tag.Key, true, Tag.Value);
+        vars.missionList.Add(Tag.Key); };
+		vars.splits = new List<string>();
+}
+
+start
+{
+ return (current.mission == "Intro.World00p");
+}
+
+split
+{
+return (vars.missionList.Contains(current.map) && (current.map != old.map));
+}
+
+isLoading
+{
+    return (current.bLoading == 1 || current.bLoading == 2) || (current.checkpointFreeze != 0);
+}
