@@ -1,53 +1,62 @@
+//FEAR Autosplitter + Load Remover made by rythin, with contributions from SuicideMachine, FireCulex and KunoDemetries
+
 state("FEAR")
 {
-	string16 mission : 0x16C045;
-	byte checkpointFreeze: 0x170D28;
-    int bLoading: 0x173DB0;
+	int gameLoading:		0x173DB0;				//0, 4 or 5 when gameplay, 1 or 2 when loading
+	byte cp2:			0x00015DCC, 0x288;			//0 or 96 when gameplay is happening
+	byte cp1:			0x170D28;				//0 when gameplay is happening
+	string16 mapName:		0x16C045;
+	int gamePaused:			0x16CCE8;				//1 when paused
 }
 
-startup
-{
-vars.missions = new Dictionary<string,string> { 
-		{"Docks.World00p", "First Encounter"}, 
-		{"WTF_Entry.World00p", "Infiltration"},
-		{"WTF_Ambush.World00p", "Heavy Resistance"},
-		{"Moody.World00p", "Bad Water"},
-		{"WTF_Exfil.World00p", "Exeunt Omnes"},
-		{"ATC_Roof.World00p", "LZ is Hot"},
-		{"Admin.World00p", "Watchers"},
-		{"Bishop_Rescue.World00p", "Bishop"},
-		{"Bioshop_Evac.World00p", "Blindside"},
-		{"Mapes_Elevator.World00p", "Sayonara, Sucker!"},
-		{"Badge.World00p", "Unauthorized Personel"},
-		{"Hives.World00p", "Afterimage"},
-		{"Alice.World00p", "Alice Wade"}, 
-		{"Getting_Out.World00p", "Flight"},
-		{"Wades.World00p", "Urban Decay"},
-		{"Factory.World00p", "Point of Entry"},
-		{"Facility_Upper.World00p", "Lapdog"},
-		{"Facility_Bypass.World00p", "Bypass"},
-		{"Vault.World00p", "The Vault"},
-        {"Alma.World00p", "Ground Zero"},
-		}; 
-
-         vars.missionList = new List<string>();
-		   foreach (var Tag in vars.missions) {
-        settings.Add(Tag.Key, true, Tag.Value);
-        vars.missionList.Add(Tag.Key); };
-		vars.splits = new List<string>();
+init {
+	vars.lastMap = "h";
 }
 
-start
-{
- return (current.mission == "Intro.World00p");
+update {
+	if (current.mapName == "" && old.mapName != "") {
+		vars.lastMap = old.mapName;
+	}
 }
 
-split
-{
-return (vars.missionList.Contains(current.map) && (current.map != old.map));
+start { 
+	if (current.mapName == "Intro.World00p" && old.gameLoading != 0 && current.gameLoading == 0 || current.gameLoading == 4 || current.gameLoading == 5) {
+		vars.lastMap = "h";
+		return true;
+	}
 }
 
-isLoading
-{
-    return (current.bLoading == 1 || current.bLoading == 2) || (current.checkpointFreeze != 0);
+split {
+	//level splits
+	if (vars.lastMap != current.mapName && current.mapName != "" && vars.lastMap != "h") {
+		vars.lastMap = current.mapName;
+		return true;
+	}
+}
+
+reset {
+	return (old.mapName == "" && current.mapName == "Intro.World00p");
+}
+
+isLoading {
+	//cp2 acts fluctuates between loading and not in the main menu
+	//this is to prevent timer slowing down in case of "Disconnected from Sever" bug
+	if (current.gamePaused == 0) {
+		if (current.cp2 != 0 && current.cp2 != 96) {
+			return true;
+		}
+	}
+	
+	//standard load removal
+	if (current.gameLoading == 1 || current.gameLoading == 2 || current.cp1 != 0) {
+		return true;
+	}
+	
+	else {
+		return false;
+	}
+}
+
+exit {
+	timer.IsGameTimePaused = true;
 }
