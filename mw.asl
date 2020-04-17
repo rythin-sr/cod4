@@ -1,8 +1,8 @@
  state("iw3sp")
 {
-   int loading1 : 0x10B1100;
+  	int loading1 : 0x10B1100;
 	string200 map : 0x6C3140;
-	int boi : 0xCDE4CC;
+	int boi : 0xCDE4C8;
 }
 
 startup {
@@ -36,7 +36,7 @@ vars.missions = new Dictionary<string,string> {
 
 
 split {
-        return (vars.missionList.Contains(current.map) && (current.map != old.map)) || ((current.map == "jeepride") && (current.boi != 32));
+        return (vars.missionList.Contains(current.map) && (current.map != old.map)) || ((current.map == "jeepride") && (current.boi == 139512));
  }
  
  start
@@ -46,10 +46,10 @@ split {
  
  reset
 {
-    return ((current.map == "ui") && (old.map != "ui"));
+    return ((current.map == "ui") && (old.map != "ui")) && (old.map != "coup");
 }
 
  isLoading
 {
-     return (current.loading1 == 0);
+     return (current.loading1 == 0) || (current.map == "coup");
 }
