@@ -3,6 +3,7 @@ state("iw4sp")
 	string131 map : 0x5DA560;
 	int loading1 : 0x171338C;
 	int boi : 0xC98A50;
+	int starter : 0xC6F280;
 }
 
 startup {
@@ -36,7 +37,7 @@ vars.missions = new Dictionary<string,string> {
  
  start
 {
-	 return ((current.map == "trainer") && (old.map == "ui"));
+	 return ((current.map == "trainer") && (old.map == "ui") && (current.starter == 25));
 }
 
  split {
