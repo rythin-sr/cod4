@@ -1,7 +1,7 @@
 state("MW2CR")
 {
-	string50 map : 0x42187F6;
-	byte loading1 : 0x6509784;
+	string50 map : 0x41758D1;
+	byte loading1 : 0x4B979A9;
 }
 
 startup {
@@ -50,3 +50,5 @@ isLoading
 	return (current.loading1 == 0);
 	
 }
+
+//updated 5/5/2020
