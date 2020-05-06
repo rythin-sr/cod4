@@ -1,8 +1,8 @@
 state("MW2CR")
 {
 	string50 map : 0x41758D1;
-	byte loading1 : 0x4B979A9;
-}
+	long loading1 : 0x4B979A9;
+	}
 
 startup {
 vars.missions = new Dictionary<string,string> { 
