@@ -42,7 +42,7 @@ isLoading {
 	//cp2 acts fluctuates between loading and not in the main menu
 	//this is to prevent timer slowing down in case of "Disconnected from Sever" bug
 	if (current.gamePaused == 0) {
-		if (current.cp2 != 0 && current.cp2 != 96) {
+		if (current.cp2 > 190) {
 			return true;
 		}
 	}
