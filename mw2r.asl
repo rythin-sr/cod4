@@ -1,8 +1,8 @@
 state("MW2CR")
 {
 	string50 map : 0x41758D1;
-	long loading1 : 0x4B979A9;
-	}
+	long loading1 : 0xBE6F1F0;
+}
 
 startup {
 vars.missions = new Dictionary<string,string> { 
@@ -47,8 +47,6 @@ vars.missions = new Dictionary<string,string> {
 
 isLoading
 {
-	return (current.loading1 == 0);
+	return (current.loading1 == 1);
 	
 }
-
-//updated 5/5/2020
