@@ -1,7 +1,7 @@
 state("MW2CR")
 {
 	string50 map : 0x41758D1;
-	long loading1 : 0xBE6F1F0;
+	int	 loading1 : 0x11B991A0;
 }
 
 startup {
