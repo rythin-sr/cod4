@@ -1,7 +1,7 @@
 state("h1_sp64_ship")
 {
 	string4 decide: 0x6668D4C;
-	string4 decide2: 0xB8D11CB;
+	string4 decide2: 0x781FAC;
 }
 
  state("h1_sp64_ship","default")
@@ -9,7 +9,7 @@ state("h1_sp64_ship")
    int loading1 : 0x1226507C;
 	string200 map : 0x443C652;
 	string4 decide: 0x6668D4C;
-	string4 decide2: 0xB8D11CB;
+	string4 decide2: 0x781FAC;
 }
 
 state("h1_sp64_ship","1.13")
@@ -17,7 +17,7 @@ state("h1_sp64_ship","1.13")
 	int loading1 : 0x1240049C;
 	string200 map : 0x45FF434;
 	string4 decide: 0x6668D4C;
-	string4 decide2: 0xB8D11CB;
+	string4 decide2: 0x781FAC;
 	}
 
 state("h1_sp64_ship","1.15")
@@ -25,7 +25,7 @@ state("h1_sp64_ship","1.15")
 	int loading1: 0xB5C6570;
 	string200 map : 0x45FF196;
 	string4 decide: 0x6668D4C;
-	string4 decide2: 0xB8D11CB;
+	string4 decide2: 0x781FAC;
 }
 
 init
