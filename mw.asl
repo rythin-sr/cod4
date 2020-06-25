@@ -5,21 +5,6 @@
 	int boi : 0xCDE4C8;
     }
 
-init
-    {
-    if (current.decide == "1.15") {
-    version = "1.15";
-    }
-
-    if (current.decide2 == "1.13") {
-	version = "1.13";
-    }
-
-    if ((current.decide != "1.15") && (current.decide2 != "1.13")) {
-	version = "default";
-    }
-    }
-
 startup {
         settings.Add("act0", true, "Prologue");
         settings.Add("act1", true, "Act 1");
