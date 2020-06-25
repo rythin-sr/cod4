@@ -1,19 +1,19 @@
 state("h1_sp64_ship")
-{
+    {
 	string4 decide: 0x6668D4C;
 	string4 decide2: 0x781FAC;
-}
+    }
 
  state("h1_sp64_ship","default")
-{
+    {
    int loading1 : 0x1226507C;
 	string200 map : 0x443C652;
 	string4 decide: 0x6668D4C;
 	string4 decide2: 0x781FAC;
-}
+    }
 
 state("h1_sp64_ship","1.13")
-{
+    {
 	int loading1 : 0x1240049C;
 	string200 map : 0x45FF434;
 	string4 decide: 0x6668D4C;
@@ -21,32 +21,45 @@ state("h1_sp64_ship","1.13")
 	}
 
 state("h1_sp64_ship","1.15")
-{
+    {
 	int loading1: 0xB5C6570;
 	string200 map : 0x45FF196;
 	string4 decide: 0x6668D4C;
 	string4 decide2: 0x781FAC;
-}
+    }
 
 init
-{
- if (current.decide == "1.15") {
+    {
+    if (current.decide == "1.15") {
     version = "1.15";
- }
+    }
 
- if (current.decide2 == "1.13") {
-	 version = "1.13";
- }
+    if (current.decide2 == "1.13") {
+	version = "1.13";
+    }
 
-  if ((current.decide != "1.15") && (current.decide2 != "1.13")) {
-	  version = "default";
-  }
-}
+    if ((current.decide != "1.15") && (current.decide2 != "1.13")) {
+	version = "default";
+    }
+    }
 
 startup {
-vars.missions = new Dictionary<string,string> { 
+        settings.Add("act0", true, "Prologue");
+        settings.Add("act1", true, "Act 1");
+        settings.Add("act2", true, "Act 2");
+        settings.Add("act3", true, "Act 3");
+
+        vars.missions1 = new Dictionary<string,string> { 
 		{"cargoship", "Crew Expendable"}, 
 		{"coup", "The Coup"},
+        };
+        vars.missions1A = new List<string>();
+        foreach (var Tag in vars.missions1) {
+        settings.Add(Tag.Key, true, Tag.Value, "act0");
+        vars.missions1A.Add(Tag.Key); 
+        };
+
+        vars.missions2 = new Dictionary<string,string> { 
 		{"blackout", "blackout"},
 		{"ts_armada", "Charlie Dont Surf"},
 		{"ts_bog_a", "The Bog"},
@@ -55,44 +68,86 @@ vars.missions = new Dictionary<string,string> {
 		{"ts_bog_b", "War Pig"},
 		{"airlift", "Shock and Awe"},
 		{"aftermath", "Aftermath"},
+        };
+
+        vars.missions2A = new List<string>();
+        foreach (var Tag in vars.missions2) {
+        settings.Add(Tag.Key, true, Tag.Value, "act1");
+        vars.missions2A.Add(Tag.Key); };
+
+        vars.missions3 = new Dictionary<string,string> { 
 		{"village_assault", "Safe House"},
 		{"scoutsniper", "All Ghillied Up"}, 
 		{"sniperescape", "One Shot, One Kill"},
 		{"village_defend", "Heat"},
 		{"ambush", "The Sins of the Father"},
 		{"icbm", "Ultimatum"},
+        };
+        vars.missions3A = new List<string>();
+        foreach (var Tag in vars.missions3) {
+        settings.Add(Tag.Key, true, Tag.Value, "act2");
+        vars.missions3A.Add(Tag.Key); };
+        
+        vars.missions4 = new Dictionary<string,string> { 
 		{"launchfacility_a", "All In"},
 		{"launchfacility_b", "No Fighting in The War Room"},
 		{"jeepride", "Game Over"},
 		};  
-	 vars.missionList = new List<string>();
-		   foreach (var Tag in vars.missions) {
-        settings.Add(Tag.Key, true, Tag.Value);
-        vars.missionList.Add(Tag.Key); };
-		vars.splits = new List<string>();
- }
+        
+        vars.missions4A = new List<string>();
+        foreach (var Tag in vars.missions4) {
+        settings.Add(Tag.Key, true, Tag.Value, "act3");
+        vars.missions4A.Add(Tag.Key); };
+    }
 
+init
+    {
+    vars.doneMaps = new List<string>(); 
+    }
 
-split {
-        return (vars.missionList.Contains(current.map) && (current.map != old.map));
- }
- 
- start
-{
-	 return ((current.map == "killhouse") && (current.loading1 == 0));
-}
+split
+    {
+    string currentMap = current.map;
+
+    if ((currentMap != old.map)) {
+        if (!vars.doneMaps.Contains(current.map)) {
+            if (settings[currentMap.Trim()]) {
+                if (vars.missions1A.Contains(currentMap) ||
+                vars.missions2A.Contains(currentMap) ||
+                vars.missions3A.Contains(currentMap) ||
+                vars.missions4A.Contains(currentMap)) {
+            vars.doneMaps.Add(current.map);
+            return true;
+            }
+            else {
+            return false;
+            }
+        }
+        }
+    }
+}   
+
+start
+    {
+	if ((current.map == "killhouse") && (current.loading1 == 0)) {
+    vars.doneMaps.Clear();
+	vars.doneMaps.Add(current.map);
+    return true;
+    }
+    }
+
  
  reset
-{
+    {
     return ((current.map == "ui") && (old.map != "ui"));
-}
+    }
 
  isLoading
-{
+    {
 	return (current.loading1 == 1);
 
 	if ((current.decide != "1.15") && (current.decide2 != "1.13") && (current.loading1 == 0))
 	{
-		return true;
+	return true;
 	}
-}
+    }
