@@ -22,12 +22,12 @@ startup {
         };
 
         vars.missions2 = new Dictionary<string,string> { 
-		{"blackout", "blackout"},
-		{"ts_armada", "Charlie Dont Surf"},
-		{"ts_bog_a", "The Bog"},
-		{"hunted", "Hunted"},
+		"blackout", "blackout"},
+		{"armada", "Charlie Dont Surf"},
+		{"bog_a", "The Bog"},
+		{"hunted", "Hunted"},	
 		{"ac130", "Death From Above"},
-		{"ts_bog_b", "War Pig"},
+		{"bog_b", "War Pig"},	
 		{"airlift", "Shock and Awe"},
 		{"aftermath", "Aftermath"},
         };
