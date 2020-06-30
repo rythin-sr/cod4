@@ -43,7 +43,6 @@ startup {
 		{"sniperescape", "One Shot, One Kill"},
 		{"village_defend", "Heat"},
 		{"ambush", "The Sins of the Father"},
-		{"icbm", "Ultimatum"},
         };
         vars.missions3A = new List<string>();
         foreach (var Tag in vars.missions3) {
@@ -51,6 +50,7 @@ startup {
         vars.missions3A.Add(Tag.Key); };
         
         vars.missions4 = new Dictionary<string,string> { 
+		{"icbm", "Ultimatum"},
 		{"launchfacility_a", "All In"},
 		{"launchfacility_b", "No Fighting in The War Room"},
 		{"jeepride", "Game Over"},
