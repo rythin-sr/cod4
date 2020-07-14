@@ -41,6 +41,7 @@ init
     if ((current.decide != "1.15") && (current.decide2 != "1.13")) {
 	version = "default";
     }
+    vars.doneMaps = new List<string>(); 
     }
 
 startup {
@@ -98,11 +99,6 @@ startup {
         foreach (var Tag in vars.missions4) {
         settings.Add(Tag.Key, true, Tag.Value, "act3");
         vars.missions4A.Add(Tag.Key); };
-    }
-
-init
-    {
-    vars.doneMaps = new List<string>(); 
     }
 
 split
