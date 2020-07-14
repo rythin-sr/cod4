@@ -1,18 +1,20 @@
 state("MW2CR")
 {
 	string6 decide: 0xA9809F;
+    string50 map1 : 0x41758D1;
+	int loading1 : 0x43784A8;
 	}
 
 state("MW2CR", "Default")
 {
-	string50 map : 0x42187F6;
+	string50 map1 : 0x42187F6;
 	byte loading1 : 0x6509784;
 	string6 decide: 0xA9809F;
 	}
 
 state("MW2CR", "1.1.12")
 {
-	string50 map : 0x41758D1;
+	string50 map1 : 0x41758D1;
 	int loading1 : 0x43784A8;
 	string6 decide: 0xA9809F;
 	}
@@ -25,6 +27,7 @@ init
   else {
     version = "Default";
   	}
+      vars.doneMaps = new List<string>(); 
 	}
 
 
@@ -76,22 +79,39 @@ startup {
         vars.missions4A.Add(Tag.Key); };
     }
 
-init
+start
     {
-    vars.doneMaps = new List<string>(); 
+	if ((current.map1 == "trainer") && (current.loading1 != 0)) 
+    {
+    vars.doneMaps.Clear();
+	vars.doneMaps.Add(current.map1);
+    return true;
+    }
+    }
+
+ isLoading
+   {
+	return ((current.loading1 == 1) && (current.decide == "1.1.12"));
+	return ((current.loading1 == 0) && (current.decide != "1.1.12"));
+    return (current.map1 == "ui");
+	}
+ 
+ reset
+    {
+    return ((current.map1 == "ui") && (old.map1 != "ui"));
     }
 
 split
     {
-    string currentMap = current.map;
+    string currentMap = current.map1;
 
-    if ((currentMap != old.map)) {
-        if (!vars.doneMaps.Contains(current.map)) {
+    if ((currentMap != old.map1)) {
+        if (!vars.doneMaps.Contains(currentMap)) {
             if (settings[currentMap.Trim()]) {
                 if (vars.missions2A.Contains(currentMap) ||
                 vars.missions3A.Contains(currentMap) ||
                 vars.missions4A.Contains(currentMap)) {
-            vars.doneMaps.Add(current.map);
+            vars.doneMaps.Add(currentMap);
             return true;
             }
             else {
@@ -101,25 +121,3 @@ split
         }
     }
     }   
-
-start
-    {
-	if ((current.map == "trainer") && (current.loading1 != 0));
-    {
-    vars.doneMaps.Clear();
-	vars.doneMaps.Add(current.map);
-    return true;
-    }
-    }
-
- 
- reset
-    {
-    return ((current.map == "ui") && (old.map != "ui"));
-    }
-
-  isLoading
-   {
-	return ((current.loading1 == 1) && (current.decide == "1.1.12"));
-	return ((current.loading1 == 0) && (current.decide != "1.1.12"));
-	}
