@@ -60,6 +60,8 @@ startup {
         foreach (var Tag in vars.missions4) {
         settings.Add(Tag.Key, true, Tag.Value, "act3");
         vars.missions4A.Add(Tag.Key); };
+	    
+	    refreshRate = 30;
     }
 
 init
